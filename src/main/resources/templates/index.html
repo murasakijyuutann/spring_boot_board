@@ -1,20 +1,72 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <meta charset="UTF-8">
-    <title>Board Home</title>
+  <meta charset="UTF-8">
+  <title>Board Home</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f6fa;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 700px;
+      margin: 50px auto;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      padding: 30px;
+    }
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+    }
+    .nav {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .nav a {
+      color: #27ae60;
+      margin: 0 8px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .nav a:hover { text-decoration: underline; }
+    ul { list-style: none; padding: 0; }
+    li {
+      padding: 10px;
+      border-bottom: 1px solid #eee;
+    }
+    li a { color: #2c3e50; text-decoration: none; }
+    li a:hover { color: #27ae60; }
+  </style>
 </head>
 <body>
-<h1>Board Posts</h1>
+  <div class="container">
+    <h1>Board Posts</h1>
+    <div class="nav">
+      <span sec:authorize="isAnonymous()">
+        <a href="/login">Login</a> |
+        <a href="/register">Register</a>
+      </span>
+      <span sec:authorize="isAuthenticated()">
+        <span style="margin-right:8px; color:#555;">Hello, <span sec:authentication="name">user</span></span>
+        <form th:action="@{/logout}" method="post" style="display:inline;">
+          <button type="submit" style="background:none; border:none; color:#e74c3c; font-weight:bold; cursor:pointer; padding:0;">Logout</button>
+        </form>
+      </span>
+      |
+      <a href="/posts/create">Create Post</a> |
+      <a href="/users">Users</a>
+    </div>
 
-<p><a href="/login">Login</a> | <a href="/register">Register</a> | <a href="/posts/create">Create Post</a></p>
-
-<ul>
-    <li th:each="post : ${posts}">
+    <ul>
+      <li th:each="post : ${posts}">
         <a th:href="@{/posts/{id}(id=${post.id})}" th:text="${post.title}">Post Title</a>
         — <span th:text="${post.author.nickname}"></span>
-    </li>
-</ul>
-
+      </li>
+    </ul>
+  </div>
 </body>
 </html>

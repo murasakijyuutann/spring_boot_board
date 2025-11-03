@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Users</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f5f6fa; margin:0; padding:0; }
+        .container { max-width: 800px; margin: 40px auto; background: #fff; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); padding: 24px; }
+        h1 { color: #2c3e50; text-align: center; }
+        table { width: 100%; border-collapse: collapse; margin-top: 16px; }
+        th, td { padding: 10px; border-bottom: 1px solid #eee; text-align: left; }
+        th { background: #fafafa; color: #555; }
+        .nav { text-align: center; margin-bottom: 10px; }
+        .nav a { color: #27ae60; margin: 0 8px; text-decoration: none; font-weight: bold; }
+        .nav a:hover { text-decoration: underline; }
+    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+        function fetchApiUsers() {
+            fetch('/api/users', { credentials: 'same-origin' })
+                .then(r => r.json())
+                .then(data => console.log('API users sample:', data))
+                .catch(console.error);
+        }
+        document.addEventListener('DOMContentLoaded', fetchApiUsers);
+    </script>
+    <!-- Note: password hashes are NEVER shown. -->
+    <!-- API endpoint /api/users exists and requires auth by default. -->
+</head>
+<body>
+<div class="container">
+    <h1>Registered Users</h1>
+    <div class="nav">
+        <a href="/">Home</a>
+        <a href="/posts/create">Create Post</a>
+        <span sec:authorize="isAnonymous()">
+            <a href="/login">Login</a>
+            <a href="/register">Register</a>
+        </span>
+        <span sec:authorize="isAuthenticated()">
+            <span style="margin-right:8px; color:#555;">Hello, <span sec:authentication="name">user</span></span>
+            <form th:action="@{/logout}" method="post" style="display:inline;">
+                <button type="submit" style="background:none; border:none; color:#e74c3c; font-weight:bold; cursor:pointer; padding:0;">Logout</button>
+            </form>
+        </span>
+    </div>
+
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Email</th>
+            <th>Nickname</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="u : ${users}">
+            <td th:text="${u.id}">1</td>
+            <td th:text="${u.email}">email@example.com</td>
+            <td th:text="${u.nickname}">nickname</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

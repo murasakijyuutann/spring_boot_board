@@ -99,4 +99,12 @@ public class PageController {
         postRepository.delete(post);
         return "redirect:/";
     }
+
+    // 9. Users list page
+    @GetMapping("/users")
+    public String users(Model model) {
+        var users = userRepository.findAll();
+        model.addAttribute("users", users);
+        return "users";
+    }
 }

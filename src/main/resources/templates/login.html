@@ -1,19 +1,44 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <meta charset="UTF-8">
-    <title>Login</title>
+  <meta charset="UTF-8">
+  <title>Login</title>
+  <style>
+    body { font-family: Arial; background: #eef2f3; }
+    .card {
+      width: 360px;
+      margin: 80px auto;
+      background: white;
+      border-radius: 10px;
+      padding: 30px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    }
+    h2 { text-align: center; color: #2c3e50; }
+    form div { margin: 12px 0; }
+    input {
+      width: 100%; padding: 10px;
+      border: 1px solid #ccc; border-radius: 6px;
+    }
+    button {
+      width: 100%; padding: 10px;
+      background: #27ae60; border: none; color: white;
+      border-radius: 6px; font-weight: bold; cursor: pointer;
+    }
+    button:hover { background: #2ecc71; }
+    p { text-align: center; margin-top: 15px; }
+    a { color: #27ae60; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+  </style>
 </head>
 <body>
-<h1>Login</h1>
-
-<form action="/login-process" method="post">
-    <label>Email: <input type="email" name="email"/></label><br/>
-    <label>Password: <input type="password" name="password"/></label><br/>
-    <button type="submit">Login</button>
-</form>
-
-<p><a href="/register">Need an account? Register</a></p>
-
+  <div class="card">
+    <h2>Login</h2>
+    <form th:action="@{/login-process}" method="post">
+      <div><label>Email:</label><br><input type="email" name="email" required></div>
+      <div><label>Password:</label><br><input type="password" name="password" required></div>
+      <button>Login</button>
+    </form>
+    <p><a th:href="@{/register}">Don't have an account? Register here</a></p>
+  </div>
 </body>
 </html>
