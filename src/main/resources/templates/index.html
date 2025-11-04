@@ -59,6 +59,9 @@
       |
       <a href="/posts/create">Create Post</a> |
       <a href="/users">Users</a>
+      <span sec:authorize="hasRole('ADMIN')">
+        | <a href="/admin">Admin</a>
+      </span>
     </div>
 
     <ul>

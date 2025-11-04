@@ -16,6 +16,7 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>Spring JWT Board</name>
     <description>Spring Boot board project with JWT authentication</description>
+    <packaging>jar</packaging>
 
     <properties>
         <java.version>21</java.version>
@@ -74,26 +75,12 @@
         <!-- Lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
+            <artifactId>Lombok</artifactId>
             <version>${lombok.version}</version>
             <scope>provided</scope>
         </dependency>
 
-        <!-- Tools -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-devtools</artifactId>
-            <scope>runtime</scope>
-            <optional>true</optional>
-        </dependency>
-
-        <!-- Swagger UI (Optional, but useful) -->
-        <dependency>
-            <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-            <version>2.3.0</version>
-        </dependency>
-
+        <!-- Thymeleaf -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
@@ -102,6 +89,21 @@
             <groupId>org.thymeleaf.extras</groupId>
             <artifactId>thymeleaf-extras-springsecurity6</artifactId>
             <version>3.1.1.RELEASE</version>
+        </dependency>
+
+        <!-- Swagger (SpringDoc) -->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>2.3.0</version>
+        </dependency>
+
+        <!-- DevTools (optional, for local dev only) -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <scope>runtime</scope>
+            <optional>true</optional>
         </dependency>
 
         <!-- Test -->
@@ -114,9 +116,11 @@
 
     <build>
         <plugins>
+            <!-- Maven Compiler Plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
@@ -130,9 +134,18 @@
                 </configuration>
             </plugin>
 
+            <!-- Spring Boot Plugin (for jar build) -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </exclude>
+                    </excludes>
+                </configuration>
             </plugin>
         </plugins>
     </build>

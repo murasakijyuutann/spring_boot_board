@@ -9,6 +9,7 @@ import mjyuu.spring_boot_board.security.JwtUtil;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import mjyuu.spring_boot_board.entity.Role;
 
 @RestController
 @RequestMapping("/auth")
@@ -29,6 +30,7 @@ public class AuthController {
         user.setEmail(dto.getEmail());
         user.setPasswordHash(passwordEncoder.encode(dto.getPassword()));
         user.setNickname(dto.getNickname());
+        user.setRole(Role.ROLE_USER);
         userRepository.save(user);
 
         return ResponseEntity.ok("User registered successfully.");

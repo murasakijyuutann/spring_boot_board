@@ -8,7 +8,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
+import java.util.List;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 @Service
 @RequiredArgsConstructor
@@ -23,7 +24,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         return User.withUsername(user.getEmail())
                 .password(user.getPasswordHash())
-                .authorities(Collections.emptyList())
+                .authorities(List.of(new SimpleGrantedAuthority(user.getRole().name())))
                 .build();
     }
 }

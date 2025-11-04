@@ -19,7 +19,13 @@ public class UserController {
     @GetMapping
     public List<UserSummaryDTO> list() {
         return userRepository.findAll().stream()
-                .map(u -> new UserSummaryDTO(u.getId(), u.getEmail(), u.getNickname()))
+                .map(u -> new UserSummaryDTO(
+                        u.getId(),
+                        u.getEmail(),
+                        u.getNickname(),
+                        u.getRole() != null ? u.getRole().name() : null,
+                        u.getCreatedAt()
+                ))
                 .toList();
     }
 }

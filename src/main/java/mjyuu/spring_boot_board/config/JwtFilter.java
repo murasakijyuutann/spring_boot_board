@@ -16,6 +16,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.List;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.lang.NonNull;
 
 @Component
 @RequiredArgsConstructor
@@ -25,9 +28,9 @@ public class JwtFilter extends OncePerRequestFilter {
     private final UserRepository userRepository;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    FilterChain filterChain)
+    protected void doFilterInternal(@NonNull HttpServletRequest request,
+                                    @NonNull HttpServletResponse response,
+                                    @NonNull FilterChain filterChain)
             throws ServletException, IOException {
 
         String header = request.getHeader("Authorization");
@@ -39,13 +42,17 @@ public class JwtFilter extends OncePerRequestFilter {
         String token = header.substring(7);
         Claims claims = jwtUtil.parseClaims(token);
         Long userId = claims.get("id", Long.class);
+        if (userId == null) {
+            filterChain.doFilter(request, response);
+            return;
+        }
 
         User user = userRepository.findById(userId).orElse(null);
         if (user != null) {
             UserDetails userDetails = new org.springframework.security.core.userdetails.User(
                     user.getEmail(),
                     user.getPasswordHash(),
-                    java.util.Collections.emptyList()
+                    List.of(new SimpleGrantedAuthority(user.getRole().name()))
             );
             UsernamePasswordAuthenticationToken authToken =
                     new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());

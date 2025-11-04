@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import org.springframework.lang.NonNull;
 import java.util.List;
 
 @Controller
@@ -52,6 +53,7 @@ public class PageController {
         user.setEmail(dto.getEmail());
         user.setPasswordHash(passwordEncoder.encode(dto.getPassword()));
         user.setNickname(dto.getNickname());
+        user.setRole(mjyuu.spring_boot_board.entity.Role.ROLE_USER);
         userRepository.save(user);
         return "redirect:/login?registered";
     }
@@ -79,7 +81,7 @@ public class PageController {
 
     // 7. View post details
     @GetMapping("/posts/{id}")
-    public String viewPost(@PathVariable Long id, Model model, Principal principal) {
+    public String viewPost(@PathVariable @NonNull Long id, Model model, Principal principal) {
         var post = postRepository.findById(id).orElseThrow();
         model.addAttribute("post", post);
 
@@ -91,9 +93,17 @@ public class PageController {
 
     // 8. Delete a post (from Thymeleaf)
     @PostMapping("/posts/{id}/delete")
-    public String deletePost(@PathVariable Long id, Principal principal) {
+    public String deletePost(@PathVariable @NonNull Long id, Principal principal) {
         var post = postRepository.findById(id).orElseThrow();
-        if (principal == null || !post.getAuthor().getEmail().equals(principal.getName())) {
+        if (principal == null) {
+            return "redirect:/?unauthorized";
+        }
+        // Allow admins to delete any post
+        boolean isAdmin = org.springframework.security.core.context.SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+        if (!isAdmin && !post.getAuthor().getEmail().equals(principal.getName())) {
             return "redirect:/?unauthorized";
         }
         postRepository.delete(post);

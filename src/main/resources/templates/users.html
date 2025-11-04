@@ -33,6 +33,9 @@
     <div class="nav">
         <a href="/">Home</a>
         <a href="/posts/create">Create Post</a>
+        <span sec:authorize="hasRole('ADMIN')">
+            <a href="/admin">Admin</a>
+        </span>
         <span sec:authorize="isAnonymous()">
             <a href="/login">Login</a>
             <a href="/register">Register</a>
@@ -51,6 +54,8 @@
             <th>ID</th>
             <th>Email</th>
             <th>Nickname</th>
+            <th>Role</th>
+            <th>Created At</th>
         </tr>
         </thead>
         <tbody>
@@ -58,6 +63,8 @@
             <td th:text="${u.id}">1</td>
             <td th:text="${u.email}">email@example.com</td>
             <td th:text="${u.nickname}">nickname</td>
+            <td th:text="${u.role}">ROLE_USER</td>
+            <td th:text="${#temporals.format(u.createdAt, 'yyyy-MM-dd HH:mm')}">2025-01-01 12:00</td>
         </tr>
         </tbody>
     </table>

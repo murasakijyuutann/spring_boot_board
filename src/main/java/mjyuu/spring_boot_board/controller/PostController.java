@@ -45,11 +45,12 @@ public class PostController {
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id, @AuthenticationPrincipal UserDetails userDetails) {
+    public void delete(@PathVariable @org.springframework.lang.NonNull Long id, @AuthenticationPrincipal UserDetails userDetails) {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Post not found"));
-
-        if (!post.getAuthor().getEmail().equals(userDetails.getUsername())) {
+        boolean isAdmin = userDetails.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+        if (!isAdmin && !post.getAuthor().getEmail().equals(userDetails.getUsername())) {
             throw new RuntimeException("Not authorized to delete this post");
         }
 

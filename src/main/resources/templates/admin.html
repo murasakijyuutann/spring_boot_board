@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body { font-family: Arial, sans-serif; background: #f5f6fa; margin:0; padding:0; }
+    .container { max-width: 900px; margin: 40px auto; background: #fff; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); padding: 24px; }
+    h1 { color: #2c3e50; text-align: center; }
+    .nav { text-align: center; margin-bottom: 10px; }
+    .nav a { color: #27ae60; margin: 0 8px; text-decoration: none; font-weight: bold; }
+    .nav a:hover { text-decoration: underline; }
+    table { width: 100%; border-collapse: collapse; margin-top: 16px; }
+    th, td { padding: 10px; border-bottom: 1px solid #eee; text-align: left; }
+    th { background: #fafafa; color: #555; }
+    form.inline { display:inline; }
+    button.link { background:none; border:none; color:#e74c3c; font-weight:bold; cursor:pointer; padding:0; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>Admin Dashboard</h1>
+  <div class="nav">
+    <a href="/">Home</a>
+    <a href="/users">Users</a>
+    <a href="/posts/create">Create Post</a>
+    <span sec:authorize="isAuthenticated()">
+      <span style="margin-right:8px; color:#555;">Hello, <span sec:authentication="name">admin</span></span>
+      <form th:action="@{/logout}" method="post" class="inline">
+        <button type="submit" class="link">Logout</button>
+      </form>
+    </span>
+  </div>
+
+  <table>
+    <thead>
+    <tr>
+      <th>ID</th>
+      <th>Title</th>
+      <th>Author</th>
+      <th>Created At</th>
+      <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="p : ${posts}">
+      <td th:text="${p.id}">1</td>
+      <td><a th:href="@{/posts/{id}(id=${p.id})}" th:text="${p.title}">Post title</a></td>
+      <td th:text="${p.author != null ? p.author.nickname : 'Unknown'}">author</td>
+      <td th:text="${#temporals.format(p.createdAt, 'yyyy-MM-dd HH:mm')}">2025-01-01 12:00</td>
+      <td>
+        <form th:action="@{/admin/posts/{id}/delete(id=${p.id})}" method="post" class="inline">
+          <button type="submit" class="link">Delete</button>
+        </form>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>
