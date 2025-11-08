@@ -7,6 +7,9 @@ server:
       enabled: true
 
 spring:
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:dev}  # dev by default, prod on render
+
   datasource:
     url: jdbc:mysql://mydb.czwaweqgeexp.ap-northeast-2.rds.amazonaws.com:3306/board_project?serverTimezone=Asia/Seoul&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull
     username: root
@@ -15,7 +18,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update  # change to 'update' after first run
+      ddl-auto: update
     properties:
       hibernate:
         format_sql: true
@@ -27,22 +30,6 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
-
-  # mail:
-  #   host: smtp.sendgrid.net
-  #   port: 587
-  #   username: apikey
-  #   password: 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
-  #   default-encoding: UTF-8
-  #   properties:
-  #     mail:
-  #       smtp:
-  #         auth: true
-  #         starttls:
-  #           enable: true
-  #       transport:
-  #         protocol: smtp
-  #   from: "noreply@vocalocart.com"
 
 springdoc:
   api-docs:
@@ -56,10 +43,3 @@ logging:
   level:
     org.hibernate.SQL: debug
     org.hibernate.orm.jdbc.bind: trace
-
-    spring:
-  security:
-    user:
-      name: root
-      password: DoodyDanks48
-
