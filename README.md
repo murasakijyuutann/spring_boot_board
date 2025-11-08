@@ -452,8 +452,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 For questions or feedback, feel free to reach out:
 
-- **GitHub**: [yourusername](https://github.com/yourusername)
-- **Email**: your.email@example.com
+- **GitHub**: [fishyboyxx](https://github.com/murasakijyuutann)
+- **Email**: neneke.emu@gmail.com
 
 ---
 
